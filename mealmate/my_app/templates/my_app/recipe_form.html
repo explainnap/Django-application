@@ -1,0 +1,37 @@
+{% extends 'my_app/base.html' %}
+{% block title %}
+  {% if view.object %}
+    Edit Recipe: {{ view.object.cuisine }}
+  {% else %}
+    New Recipe
+  {% endif %}
+{% endblock %}
+
+{% block content %}
+  <h2>
+    {% if view.object %}
+      Edit Recipe
+    {% else %}
+      Create New Recipe
+    {% endif %}
+  </h2>
+  <form method="post">
+    {% csrf_token %}
+    {% for field in form %}
+      <div class="mb-3">
+        {{ field.label_tag }}
+        {{ field }}
+        {% if field.help_text %}
+          <small class="form-text text-muted">{{ field.help_text }}</small>
+        {% endif %}
+        {% for error in field.errors %}
+          <div class="text-danger">{{ error }}</div>
+        {% endfor %}
+      </div>
+    {% endfor %}
+    <button type="submit" class="btn btn-success">
+      {% if view.object %}Update{% else %}Create{% endif %}
+    </button>
+    <a href="{% url 'my_app:recipe_index' %}" class="btn btn-secondary">Cancel</a>
+  </form>
+{% endblock %}

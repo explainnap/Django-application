@@ -1,0 +1,7 @@
+{% extends 'my_app/base.html' %}
+{% block title %}Logged Out{% endblock %}
+
+{% block content %}
+  <h2>Logged Out</h2>
+  <p>You have successfully logged out. <a href="{% url 'login' %}">Log in again?</a></p>
+{% endblock %}

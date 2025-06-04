@@ -1,0 +1,82 @@
+{% extends 'my_app/base.html' %}
+{% block title %}Recipe: {{ recipe.cuisine }}{% endblock %}
+
+{% block content %}
+  <div class="mb-3">
+    <h2>{{ recipe.cuisine }}</h2>
+    <p>
+      <strong>Skill Level:</strong> {{ recipe.skill_level }}<br>
+      <strong>Cooking Time:</strong> {{ recipe.cooking_time }} minutes<br>
+      <strong>Submitted by:</strong> {{ recipe.user.username }}
+    </p>
+
+    {% if user == recipe.user %}
+      <a href="{% url 'my_app:recipe_update' recipe.pk %}" class="btn btn-sm btn-outline-secondary">Edit</a>
+      <a href="{% url 'my_app:recipe_delete' recipe.pk %}" class="btn btn-sm btn-outline-danger">Delete</a>
+    {% endif %}
+  </div>
+
+  <hr>
+
+  <!-- Comments Section -->
+  <div class="mb-4">
+    <h4>Comments ({{ comments.count }})</h4>
+    {% if comments %}
+      <ul class="list-group">
+        {% for comment in comments %}
+          <li class="list-group-item d-flex justify-content-between align-items-start">
+            <div>
+              <p class="mb-1">{{ comment.text }}</p>
+              <small class="text-muted">
+                by {{ comment.user.username }} on {{ comment.created_at|date:"M j, Y H:i" }}
+              </small>
+            </div>
+            {% if user == comment.user %}
+              <div class="btn-group btn-group-sm">
+                <a
+                  href="{% url 'my_app:comment_update' comment.pk %}"
+                  class="btn btn-outline-secondary"
+                >Edit</a>
+                <a
+                  href="{% url 'my_app:comment_delete' comment.pk %}"
+                  class="btn btn-outline-danger"
+                >Delete</a>
+              </div>
+            {% endif %}
+          </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p>No comments yet. Be the first to comment!</p>
+    {% endif %}
+  </div>
+
+  <!-- Add Comment Form -->
+  {% if user.is_authenticated %}
+    <div class="card mb-4">
+      <div class="card-body">
+        <h5 class="card-title">Add a Comment</h5>
+        <form method="post" action="{% url 'my_app:comment_add' recipe.id %}">
+          {% csrf_token %}
+          {{ comment_form.non_field_errors }}
+          <div class="mb-3">
+            {{ comment_form.text.label_tag }}
+            {{ comment_form.text }}
+            {% for err in comment_form.text.errors %}
+              <div class="text-danger">{{ err }}</div>
+            {% endfor %}
+          </div>
+          <button type="submit" class="btn btn-primary">Post Comment</button>
+        </form>
+      </div>
+    </div>
+  {% else %}
+    <p>
+      <a href="{% url 'login' %}?next={% url 'my_app:recipe_detail' recipe.id %}">
+        Log in
+      </a> to leave a comment.
+    </p>
+  {% endif %}
+
+  <a href="{% url 'my_app:recipe_index' %}" class="btn btn-link">← Back to all recipes</a>
+{% endblock %}

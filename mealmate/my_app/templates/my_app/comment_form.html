@@ -1,0 +1,42 @@
+{% extends 'my_app/base.html' %}
+{% block title %}
+  {% if view and view.object %}
+    Edit Comment
+  {% else %}
+    Add Comment to "{{ recipe.cuisine }}"
+  {% endif %}
+{% endblock %}
+
+{% block content %}
+  {% if view and view.object %}
+    <h2>Edit Your Comment</h2>
+    <form method="post">
+      {% csrf_token %}
+      {{ form.non_field_errors }}
+      <div class="mb-3">
+        {{ form.text.label_tag }}
+        {{ form.text }}
+        {% for err in form.text.errors %}
+          <div class="text-danger">{{ err }}</div>
+        {% endfor %}
+      </div>
+      <button type="submit" class="btn btn-primary">Update Comment</button>
+      <a href="{{ view.object.recipe.get_absolute_url }}" class="btn btn-secondary">Cancel</a>
+    </form>
+  {% else %}
+    <h2>Add a Comment to "{{ recipe.cuisine }}"</h2>
+    <form method="post">
+      {% csrf_token %}
+      {{ form.non_field_errors }}
+      <div class="mb-3">
+        {{ form.text.label_tag }}
+        {{ form.text }}
+        {% for err in form.text.errors %}
+          <div class="text-danger">{{ err }}</div>
+        {% endfor %}
+      </div>
+      <button type="submit" class="btn btn-primary">Post Comment</button>
+      <a href="{% url 'my_app:recipe_detail' recipe.id %}" class="btn btn-secondary">Cancel</a>
+    </form>
+  {% endif %}
+{% endblock %}
