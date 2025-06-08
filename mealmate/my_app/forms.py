@@ -4,11 +4,13 @@ from .models import Recipe, Comment
 class RecipeForm(forms.ModelForm):
     class Meta:
         model = Recipe
-        fields = ['cuisine', 'cooking_time', 'skill_level']
+        fields = ['title', 'cuisine', 'cooking_time', 'skill_level', 'external_link']
         widgets = {
+            'title': forms.TextInput(attrs={'placeholder': 'e.g. Spaghetti Carbonara'}),
             'cuisine': forms.TextInput(attrs={'placeholder': 'e.g. Italian, Mexican…'}),
             'cooking_time': forms.NumberInput(attrs={'min': 1}),
             'skill_level': forms.Select(),
+            'external_link': forms.URLInput(attrs={'placeholder': 'https://…'}),
         }
 
 class CommentForm(forms.ModelForm):

@@ -1,37 +1,95 @@
 {% extends 'my_app/base.html' %}
+{% load static %}
+
 {% block title %}
   {% if view.object %}
-    Edit Recipe: {{ view.object.cuisine }}
+    Edit Recipe: {{ view.object.title }}
   {% else %}
     New Recipe
   {% endif %}
 {% endblock %}
 
 {% block content %}
-  <h2>
-    {% if view.object %}
-      Edit Recipe
-    {% else %}
-      Create New Recipe
-    {% endif %}
-  </h2>
-  <form method="post">
-    {% csrf_token %}
-    {% for field in form %}
-      <div class="mb-3">
-        {{ field.label_tag }}
-        {{ field }}
-        {% if field.help_text %}
-          <small class="form-text text-muted">{{ field.help_text }}</small>
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <h2 class="mb-4">
+        {% if view.object %}
+          Edit Recipe
+        {% else %}
+          Create New Recipe
         {% endif %}
-        {% for error in field.errors %}
-          <div class="text-danger">{{ error }}</div>
-        {% endfor %}
-      </div>
-    {% endfor %}
-    <button type="submit" class="btn btn-success">
-      {% if view.object %}Update{% else %}Create{% endif %}
-    </button>
-    <a href="{% url 'my_app:recipe_index' %}" class="btn btn-secondary">Cancel</a>
-  </form>
+      </h2>
+      <form method="post">
+        {% csrf_token %}
+
+        <!-- Title -->
+        <div class="mb-3">
+          {{ form.title.label_tag }}
+          {{ form.title }}
+          {% if form.title.help_text %}
+            <small class="form-text text-muted">{{ form.title.help_text }}</small>
+          {% endif %}
+          {% for error in form.title.errors %}
+            <div class="text-danger">{{ error }}</div>
+          {% endfor %}
+        </div>
+
+        <!-- Cuisine -->
+        <div class="mb-3">
+          {{ form.cuisine.label_tag }}
+          {{ form.cuisine }}
+          {% if form.cuisine.help_text %}
+            <small class="form-text text-muted">{{ form.cuisine.help_text }}</small>
+          {% endif %}
+          {% for error in form.cuisine.errors %}
+            <div class="text-danger">{{ error }}</div>
+          {% endfor %}
+        </div>
+
+        <!-- Cooking Time -->
+        <div class="mb-3">
+          {{ form.cooking_time.label_tag }}
+          {{ form.cooking_time }}
+          {% if form.cooking_time.help_text %}
+            <small class="form-text text-muted">{{ form.cooking_time.help_text }}</small>
+          {% endif %}
+          {% for error in form.cooking_time.errors %}
+            <div class="text-danger">{{ error }}</div>
+          {% endfor %}
+        </div>
+
+        <!-- Skill Level -->
+        <div class="mb-3">
+          {{ form.skill_level.label_tag }}
+          {{ form.skill_level }}
+          {% if form.skill_level.help_text %}
+            <small class="form-text text-muted">{{ form.skill_level.help_text }}</small>
+          {% endif %}
+          {% for error in form.skill_level.errors %}
+            <div class="text-danger">{{ error }}</div>
+          {% endfor %}
+        </div>
+
+        <!-- External Link -->
+        <div class="mb-3">
+          {{ form.external_link.label_tag }}
+          {{ form.external_link }}
+          {% if form.external_link.help_text %}
+            <small class="form-text text-muted">{{ form.external_link.help_text }}</small>
+          {% endif %}
+          {% for error in form.external_link.errors %}
+            <div class="text-danger">{{ error }}</div>
+          {% endfor %}
+        </div>
+
+        <!-- Submit -->
+        <div class="d-flex gap-2">
+          <button type="submit" class="btn btn-success">
+            {% if view.object %}Update{% else %}Create{% endif %}
+          </button>
+          <a href="{% url 'my_app:recipe_index' %}" class="btn btn-secondary">Cancel</a>
+        </div>
+      </form>
+    </div>
+  </div>
 {% endblock %}

@@ -1,14 +1,30 @@
 {% extends 'my_app/base.html' %}
-{% block title %}Recipe: {{ recipe.cuisine }}{% endblock %}
+{% load static %}
+
+{% block title %}Recipe: {{ recipe.title }}{% endblock %}
 
 {% block content %}
-  <div class="mb-3">
-    <h2>{{ recipe.cuisine }}</h2>
+  <div class="mb-4">
+    <h2>{{ recipe.title }}</h2>
     <p>
-      <strong>Skill Level:</strong> {{ recipe.skill_level }}<br>
+      <strong>Cuisine:</strong> {{ recipe.cuisine }}<br>
       <strong>Cooking Time:</strong> {{ recipe.cooking_time }} minutes<br>
+      <strong>Skill Level:</strong> {{ recipe.skill_level }}<br>
       <strong>Submitted by:</strong> {{ recipe.user.username }}
     </p>
+
+    {% if recipe.external_link %}
+      <p>
+        <a 
+          href="{{ recipe.external_link }}" 
+          target="_blank" 
+          rel="noopener" 
+          class="btn btn-outline-primary mb-3"
+        >
+          View Original Recipe
+        </a>
+      </p>
+    {% endif %}
 
     {% if user == recipe.user %}
       <a href="{% url 'my_app:recipe_update' recipe.pk %}" class="btn btn-sm btn-outline-secondary">Edit</a>
@@ -33,14 +49,12 @@
             </div>
             {% if user == comment.user %}
               <div class="btn-group btn-group-sm">
-                <a
-                  href="{% url 'my_app:comment_update' comment.pk %}"
-                  class="btn btn-outline-secondary"
-                >Edit</a>
-                <a
-                  href="{% url 'my_app:comment_delete' comment.pk %}"
-                  class="btn btn-outline-danger"
-                >Delete</a>
+                <a href="{% url 'my_app:comment_update' comment.pk %}" class="btn btn-outline-secondary">
+                  Edit
+                </a>
+                <a href="{% url 'my_app:comment_delete' comment.pk %}" class="btn btn-outline-danger">
+                  Delete
+                </a>
               </div>
             {% endif %}
           </li>
